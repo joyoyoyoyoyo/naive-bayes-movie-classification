@@ -7,11 +7,21 @@ class Commander:
     # def __init__(self):
 
 
-    def testReadInput(self, filename, pathDirectory='./resources/'):
-        command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c";
+    def readVocabulary(self, filename, pathDirectory='./resources/'):
+        command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c"
         args = shlex.split(command)
-        proc = subprocess.Popen(command, stdin=subprocess.PIPE, shell=True)
-        out = proc.communicate()
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
+        # out = proc.communicate()
+        retcode = proc.poll()
+        for line in iter(proc.stdout.readline, b''):
+            frequencyCount, word = line.decode('utf-8').split()
+            print(frequencyCount + ':\t\t' + word)
+            # print(label)
+            # print(test)
+
+        proc.stdout.close()
+        proc.stdin.close()
+
         # print(out.rstrip().decode('UTF-8'))
         # proc.communicate(b"input data\n")
         # out, err = proc.communicate()
@@ -32,7 +42,7 @@ if __name__ == "__main__":
     # commander = Commander(filename='traning.txt')
     # print(commander._args)
     commander = Commander()
-    print(commander.testReadInput('training.txt'))
+    print(commander.readVocabulary('training.txt'))
 
 
     # def tokenizeSentence(self, sentence):
