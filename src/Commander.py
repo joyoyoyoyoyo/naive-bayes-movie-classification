@@ -6,41 +6,32 @@ class Commander:
 
     # def __init__(self):
 
-
+    # Training data vocabulary size: 35918
+    # Testing  data vocabulary size: 11123
     def readVocabulary(self, filename, pathDirectory='./resources/'):
         command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c"
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
         retcode = proc.poll()
+        freqMat = []
+        vocabMat = []
         for line in iter(proc.stdout.readline, b''):
             frequencyCount, word = line.decode('utf-8').split()
-            print(frequencyCount + ':\t\t' + word)
+            freqMat.append(frequencyCount)
+            vocabMat.append(word)
+            # print(frequencyCount + ':\t\t' + word)
             # print(label)
             # print(test)
-
         proc.stdout.close()
         proc.stdin.close()
-
-        # print(out.rstrip().decode('UTF-8'))
-        # proc.communicate(b"input data\n")
-        # out, err = proc.communicate()
-        # with open
-        # while True:
-        #     # line = proc.stdout.readline()
-        #     if line != '':
-        #         # the real code does filtering here
-        #         print("test:", line.rstrip().decode('UTF-8'))
-        #     else:
-        #         break
-        # # args = shlex.split(_path)
-        # if pathDir is './resources/':
-        #
-        # process = subprocess.Popen()
+        return freqMat, vocabMat
 
 if __name__ == "__main__":
     # commander = Commander(filename='traning.txt')
     # print(commander._args)
     commander = Commander()
-    print(commander.readVocabulary('training.txt'))
+    freqVec, vocabVec = commander.readVocabulary('training.txt')
+    print(freqVec)
+    print(vocabVec)
 
 
     # def tokenizeSentence(self, sentence):
