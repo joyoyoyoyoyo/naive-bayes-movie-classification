@@ -1,6 +1,6 @@
-import os
 import subprocess
-import shlex
+import shlex # args = shlex.split(command)
+
 
 class Commander:
 
@@ -9,9 +9,7 @@ class Commander:
 
     def readVocabulary(self, filename, pathDirectory='./resources/'):
         command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c"
-        args = shlex.split(command)
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
-        # out = proc.communicate()
         retcode = proc.poll()
         for line in iter(proc.stdout.readline, b''):
             frequencyCount, word = line.decode('utf-8').split()
