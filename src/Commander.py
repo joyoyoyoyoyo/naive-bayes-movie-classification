@@ -10,7 +10,7 @@ class Commander:
     # Training data vocabulary size: 35918
     # Testing  data vocabulary size: 11123
     def readVocabulary(self, filename, pathDirectory='./resources/'):
-        command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c"
+        command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
         retcode = proc.poll()
         freqMat = []
