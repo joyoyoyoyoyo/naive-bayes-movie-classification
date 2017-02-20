@@ -1,6 +1,7 @@
 import subprocess
-import shlex # args = shlex.split(command)
-
+# import shlex # args = shlex.split(command)
+# https://docs.python.org/2/tutorial/datastructures.html
+# https://docs.python.org/2/library/subprocess.html
 
 class Commander:
 
@@ -26,38 +27,11 @@ class Commander:
         return freqMat, vocabMat
 
 if __name__ == "__main__":
-    # commander = Commander(filename='traning.txt')
-    # print(commander._args)
     commander = Commander()
     freqVec, vocabVec = commander.readVocabulary('training.txt')
     print(freqVec)
     print(vocabVec)
 
-
     # def tokenizeSentence(self, sentence):
-    #
-    #
-    # String
-    # mergeAndDel = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c";
-    #
-    # Process
-    # p = Runtime.getRuntime().exec(new
-    # String[]
-    # {"bash", "-c", mergeAndDel});
-    #
-    # // p.waitFor();
-    # BufferedReader
-    # buf = new
-    # BufferedReader(new
-    # InputStreamReader(p.getInputStream()));
-    # String
-    # line = "";
-    # int
-    # vocabularyCount = 0;
-    # while ((line=buf.readLine()) != null) {
-    # ++vocabularyCount;
-    # System.out.println(line);
-    # }
-    # System.out.println(vocabularyCount);
 
 
