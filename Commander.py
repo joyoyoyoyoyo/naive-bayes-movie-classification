@@ -36,7 +36,6 @@ if __name__ == "__main__":
     for doc, label in commander.getDocuments('training.txt'):
         print label + ":\t\t" + doc
         # print label
-
     # print(freqVec)
     # print(vocabVec)
 
