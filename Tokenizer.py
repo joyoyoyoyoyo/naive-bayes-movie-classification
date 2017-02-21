@@ -1,5 +1,7 @@
 import re
 
+from Commander import Commander
+
 
 class Tokenizer():
     def __init__(self):
@@ -11,10 +13,14 @@ class Tokenizer():
         return tokens
 
 if __name__ == "__main__":
+    commander = Commander()
+    freqVec, vocabVec = commander.readVocabulary('training.txt')
     tokenizer = Tokenizer()
     tokens = tokenizer.tokenize_sentence('Hello, my name is Paul')
     test = tokens | {'hgdfey'}
-    print test
+    word_vec = [0] * commander.vocabSize
+    sentence_vec = [0] * len(tokens)
+    print sentence_vec
 
 # set([token.lower()
 #      for token in re.findall('\w+', text)

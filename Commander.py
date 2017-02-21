@@ -6,7 +6,8 @@ import csv
 
 class Commander:
 
-    # def __init__(self):
+    def __init__(self):
+        vocabSize = 0
 
     # Training data vocabulary size: 35918
     # Testing  data vocabulary size: 11123
@@ -22,6 +23,7 @@ class Commander:
             vocabMat.append(word)
         proc.stdout.close()
         proc.stdin.close()
+        self.vocabSize = len(vocabMat)
         return freqMat, vocabMat
 
     def getDocuments(self, filename, pathDirectory='./resources/'):
