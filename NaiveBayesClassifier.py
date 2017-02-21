@@ -1,12 +1,8 @@
-import os
-import subprocess
-
+import numpy
 # Steps for Tokenization
 
-
-commander = os
-
 # Matrix representation
+
 
 # Frequency Count
 
