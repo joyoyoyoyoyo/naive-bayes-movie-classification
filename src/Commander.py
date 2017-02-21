@@ -1,4 +1,5 @@
 import subprocess
+import csv
 # import shlex # args = shlex.split(command)
 # https://docs.python.org/2/tutorial/datastructures.html
 # https://docs.python.org/2/library/subprocess.html
@@ -19,18 +20,25 @@ class Commander:
             frequencyCount, word = line.decode('utf-8').split()
             freqMat.append(frequencyCount)
             vocabMat.append(word)
-            # print(frequencyCount + ':\t\t' + word)
-            # print(label)
-            # print(test)
         proc.stdout.close()
         proc.stdin.close()
         return freqMat, vocabMat
 
+    def getDocuments(self, filename, pathDirectory='./resources/'):
+        with open(pathDirectory + filename, 'rb') as csvfile:
+            moviereader = csv.reader(csvfile, delimiter='\t')
+            for row in moviereader:
+                yield (row[0], row[1])
+
 if __name__ == "__main__":
     commander = Commander()
     freqVec, vocabVec = commander.readVocabulary('training.txt')
-    print(freqVec)
-    print(vocabVec)
+    for doc, label in commander.getDocuments('training.txt'):
+        print label + ":\t\t" + doc
+        # print label
+
+    # print(freqVec)
+    # print(vocabVec)
 
     # def tokenizeSentence(self, sentence):
 
