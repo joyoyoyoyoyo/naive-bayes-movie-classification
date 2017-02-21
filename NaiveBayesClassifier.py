@@ -3,7 +3,6 @@ import numpy
 
 # Matrix representation
 
-
 # Frequency Count
 
 # Document Frequency

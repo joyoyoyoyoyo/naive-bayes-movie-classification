@@ -3,6 +3,8 @@ import csv
 # import shlex # args = shlex.split(command)
 # https://docs.python.org/2/tutorial/datastructures.html
 # https://docs.python.org/2/library/subprocess.html
+# https://docs.scipy.org/doc/numpy/reference/generated/numpy.genfromtxt.html
+# https://docs.scipy.org/doc/numpy/reference/generated/numpy.loadtxt.html
 
 class Commander:
 
