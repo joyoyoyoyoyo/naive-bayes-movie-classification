@@ -1,6 +1,6 @@
 import unittest
 
-class Counter(unittest.TestCase):
+class CounterTest(unittest.TestCase):
     def setUp(self):
         self
 
