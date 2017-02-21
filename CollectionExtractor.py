@@ -20,4 +20,6 @@ def count_pos_reviews(training_mat=np.random.choice([0, 1], size=(3,5), p=[.9, .
     print num_pos_reviews
     print pos_review_vector
 
+
+
 count_pos_reviews()
