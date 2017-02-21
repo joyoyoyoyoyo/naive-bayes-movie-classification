@@ -12,10 +12,43 @@ class Tokenizer():
                       and token not in blacklist])
         return tokens
 
-    def wordCountInCorpus(self, word):
+    def wordCountInCorpus(self, word, corpus):
+        corpus
+
+    def wordCountInDocument(self, word, document):
+        document
+
+    def wordCountInClass(self, word, classfication):
+        classfication
+
+    def computeProbability(self):
+        self
+        # if in word, use values
+        # else, perform laplace smoothing
+        # test case (Not zero)
+
+    def bigramCount(self, term_phrase, corpus):
+        self # feature
+
+    def sentenceLength(self):
+        self # feature, attribute
+
+    def numberOfSentences(self):
+        self # stemming
+
+    def numberOfPunctuation(self):
+        self # potential feature
+
+    def laplace_smoothing(self):
+        self # smooth
+
+    def porterStemming(self, uniqWords):
+        self
+
+    def wordCountInCorpusRegEx(self, word, regex_normalize):
         word
 
-    def wordCountInDocument(self, document):
+    def wordCountInDocumentRegex(self, document, regex_normalize):
         document
 
 if __name__ == "__main__":
