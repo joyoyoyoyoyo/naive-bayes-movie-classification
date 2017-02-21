@@ -12,6 +12,12 @@ class Tokenizer():
                       and token not in blacklist])
         return tokens
 
+    def wordCountInCorpus(self, word):
+        word
+
+    def wordCountInDocument(self, document):
+        document
+
 if __name__ == "__main__":
     commander = Commander()
     freqVec, vocabVec = commander.readVocabulary('training.txt')
