@@ -18,16 +18,8 @@ class IntegrationTest(unittest.TestCase):
         # trainMat =
 
     def test_read_corpus(self):
-        docs = []
-        labels = []
-        for doc, label in self.commander.getDocumentsYield('training.txt'):
-            docs.append(doc)
-            labels.append(label)
-
-        # return docs, labels
-        corpus = np.column_stack((docs, labels))
+        corpus = self.commander.get_corpus_as_numpy('training.txt')
         print corpus
-        return corpus
 
     def testClassify(self):
         self

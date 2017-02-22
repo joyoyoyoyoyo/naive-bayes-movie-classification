@@ -38,7 +38,18 @@ class Commander():
             for row in moviereader:
                 yield (row[0], row[1])
 
-    # did not work
+    def get_corpus_as_numpy(self, filename, path_directory='../resources/'):
+        docs = []
+        labels = []
+        for doc, label in self.getDocumentsYield(filename,path_directory):
+            docs.append(doc)
+            labels.append(label)
+
+        # return (docs, labels)
+        corpus = np.column_stack((docs, labels))
+        return corpus
+
+            # did not work
     #   try this
     #
     #   for doc, label in commander.getDocumentsYield('training.txt'):
