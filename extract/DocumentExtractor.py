@@ -14,6 +14,14 @@ class DocumentExtractor():
         tokens = self._tokenizer.tokenize_sentence(doc)
         normalizedTerm = term
         termFrequency = tokens.count(normalizedTerm)
-        return termFrequency
+        return term, termFrequency
+
+    def count_terms(self, doc):
+        tokens = self._tokenizer.tokenize_sentence(doc)
+        return len(tokens)
+
+    def count_unique_terms(self, doc):
+        tokens = set(self._tokenizer.tokenize_sentence(doc))
+        return len(tokens)
 
 # if __name__ == "__main__":
