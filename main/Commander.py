@@ -14,7 +14,7 @@ class Commander():
 
     # Training data vocabulary size: 35918
     # Testing  data vocabulary size: 11123
-    def readVocabulary(self, filename, pathDirectory='./resources/'):
+    def readVocabulary(self, filename, pathDirectory='../resources/'):
         command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
         retcode = proc.poll()
@@ -27,7 +27,9 @@ class Commander():
         proc.stdout.close()
         proc.stdin.close()
         self.vocabSize = len(vocabMat)
-        return np.array(freqMat), np.array(vocabMat)
+        # return np.array(freqMat), np.array(vocabMat)
+        trainingMat = np.column_stack((vocabMat, freqMat))
+        return trainingMat
 
     def getDocuments(self, filename, pathDirectory='./resources/'):
         with open(pathDirectory + filename, 'rb') as csvfile:
