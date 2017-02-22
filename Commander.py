@@ -1,12 +1,13 @@
 import subprocess
 import csv
+import numpy as np
 # import shlex # args = shlex.split(command)
 # https://docs.python.org/2/tutorial/datastructures.html
 # https://docs.python.org/2/library/subprocess.html
 # https://docs.scipy.org/doc/numpy/reference/generated/numpy.genfromtxt.html
 # https://docs.scipy.org/doc/numpy/reference/generated/numpy.loadtxt.html
 
-class Commander:
+class Commander():
 
     def __init__(self):
         vocabSize = 0
@@ -26,7 +27,7 @@ class Commander:
         proc.stdout.close()
         proc.stdin.close()
         self.vocabSize = len(vocabMat)
-        return freqMat, vocabMat
+        return np.array(freqMat), np.array(vocabMat)
 
     def getDocuments(self, filename, pathDirectory='./resources/'):
         with open(pathDirectory + filename, 'rb') as csvfile:

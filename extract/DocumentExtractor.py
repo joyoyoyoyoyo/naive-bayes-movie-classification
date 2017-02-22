@@ -10,6 +10,7 @@ class DocumentExtractor():
         self._generator = doc_generator
         self._tokenizer = Tokenizer()
 
+    # Data type for each, will assume an np array
     def bag_of_words_term_freq(self, vocab, doc_tokens):
         term_freq_in_doc_vector = np.zeros(len(vocab))
 
@@ -22,6 +23,7 @@ class DocumentExtractor():
             # else:
             #     term_freq_vector[term] += 1
         return term_freq_in_doc_vector
+
 
 
     # def extract_term_counts_with_generator(self):

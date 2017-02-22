@@ -3,7 +3,7 @@ import unittest
 class IntegrationTest(unittest.TestCase):
 
     def setUp(self):
-        self
+        # self.commander = Commander
     def tearDown(self):
         self
     def testTrain(self):
