@@ -54,14 +54,14 @@ if __name__ == "__main__":
 
         if label == 1:
             freq_positive += term_freq_in_doc_vector
-            prob_positive_given_collection += sum(term_freq_in_doc_vector)
+            prob_positive_given_collection += num_terms_in_doc
         else:
             freq_negative += term_freq_in_doc_vector
-            prob_negative_given_collection += sum(term_freq_in_doc_vector)
+            prob_negative_given_collection += num_terms_in_doc
     print prob_positive_given_collection
     print prob_positive_given_collection
     prob_pos_vector = np.log((freq_positive + 1) / prob_positive_given_collection)
-    prob_neg_vector = np.log((freq_negative + 1) / prob_negative_given_collection)
+    prob_neg_vector = np.log((freq_negative + 1)/ prob_negative_given_collection)
     print prob_positive_review, prob_pos_vector, prob_neg_vector
         # return prob_positive_review, prob_pos_vector, prob_neg_vector
 
