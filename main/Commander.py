@@ -1,6 +1,7 @@
 import subprocess
 import csv
 import numpy as np
+
 # import shlex # args = shlex.split(command)
 # https://docs.python.org/2/tutorial/datastructures.html
 # https://docs.python.org/2/library/subprocess.html
@@ -31,16 +32,30 @@ class Commander():
         vocabFreqMat = np.column_stack((vocabMat, freqMat))
         return vocabFreqMat
 
-    def getDocuments(self, filename, pathDirectory='./resources/'):
+    def getDocumentsYield(self, filename, pathDirectory='../resources/'):
         with open(pathDirectory + filename, 'rb') as csvfile:
             moviereader = csv.reader(csvfile, delimiter='\t')
             for row in moviereader:
                 yield (row[0], row[1])
 
+    # did not work
+    #   try this
+    #
+    #   for doc, label in commander.getDocumentsYield('training.txt'):
+    #       print label + ":\t\t" + doc
+    #
+    # def get_corpus_as_numpy(self, filename, path_directory='../resources/'):
+    #     corpus = np.genfromtxt(path_directory + filename,
+    #                            dtype=[('mystr', 'S5'), ('myint', 'i8')],
+    #                            usecols=np.arange(0, 1),
+    #                            delimiter='\t')
+    #     return corpus
+
+
 if __name__ == "__main__":
     commander = Commander()
     freqVec, vocabVec = commander.readVocabulary('training.txt')
-    for doc, label in commander.getDocuments('training.txt'):
+    for doc, label in commander.getDocumentsYield('training.txt'):
         print label + ":\t\t" + doc
         # print label
     # print(freqVec)
