@@ -38,10 +38,14 @@ class Commander():
         # return vocabFreqMat
 
     def getDocumentsYield(self, filename, pathDirectory='../resources/'):
+        # count = 0
         with open(pathDirectory + filename, 'rb') as csvfile:
             moviereader = csv.reader(csvfile, delimiter='\t')
             for row in moviereader:
                 yield (row[0], row[-1])
+                # count += 1
+        # print count
+        csvfile.close()
 
     def get_corpus_as_lists(self, filename, path_directory='../resources/'):
         docs = []
@@ -57,7 +61,7 @@ class Commander():
         labels = []
         for doc, label in self.getDocumentsYield(filename,path_directory):
             docs.append(doc)
-            labels.append(label)
+            labels.append(int(label))
 
         # return (docs, labels)
         corpus = np.column_stack((docs, labels))
