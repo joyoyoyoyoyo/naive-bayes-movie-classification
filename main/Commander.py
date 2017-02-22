@@ -31,7 +31,7 @@ class Commander():
         proc.stdout.close()
         proc.stdin.close()
         self.vocabSize = len(vocabSet)
-        return dictVocabFreq
+        return dictVocabFreq, vocabSet, freqSet
         # return freqSet, vocabSet, dictVocabFreq
         # return np.array(freqMat), np.array(vocabMat)
         # vocabFreqMat = np.column_stack((vocabMat, freqMat))

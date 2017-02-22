@@ -12,19 +12,19 @@ class DocumentExtractor():
     #     self._tokenizer = Tokenizer()
 
     # Data type for each, will assume an np array
-    # def bag_of_words_term_freq(self, vocab, doc_tokens):
-    #     term_freq_in_doc_vector = np.zeros(len(vocab))
-    #     # term_freq_in_doc_vector = [0]*len(vocab)
-    #
-    #     # assume vocab is constant?
-    #     for term in doc_tokens:
-    #         if term in vocab:
-    #             index_in_vocab = np.where(vocab == term)
-    #             term_freq_in_doc_vector[index_in_vocab] += 1
-    #         # TODO: What if term is not in vocab, then perform laplace smoothing
-    #         # else:
-    #         #     term_freq_vector[term] += 1
-    #     return term_freq_in_doc_vector
+    def bag_of_words_term_freq(self, vocab, doc_tokens):
+        term_freq_in_doc_vector = np.zeros(len(vocab))
+        # term_freq_in_doc_vector = [0]*len(vocab)
+
+        # assume vocab is constant?
+        for term in doc_tokens:
+            if term in vocab:
+                index_in_vocab = np.where(vocab == term)
+                term_freq_in_doc_vector[index_in_vocab] += 1
+            # TODO: What if term is not in vocab, then perform laplace smoothing
+            # else:
+            #     term_freq_vector[term] += 1
+        return term_freq_in_doc_vector
 
     def bag_of_words_term_freq_dict(self, vocab, doc_tokens):
         # term_freq_in_doc_vector = np.zeros(len(vocab))
@@ -37,9 +37,20 @@ class DocumentExtractor():
             # TODO: What if term is not in vocab, then perform laplace smoothing
             # else:
             #     term_freq_vector[term] += 1
+        return term_freq_in_doc_dict.values()
+
+    def bag_of_words_term_freq_set(self, vocab, doc_tokens):
+        # term_freq_in_doc_vector = np.zeros(len(vocab))
+        term_freq_in_doc_dict = [0] * len(vocab)
+
+        # assume vocab is constant?
+        for term in doc_tokens:
+            if term in vocab:
+                term_freq_in_doc_dict[vocab.index(term)] += 1
+                # TODO: What if term is not in vocab, then perform laplace smoothing
+                # else:
+                #     term_freq_vector[term] += 1
         return term_freq_in_doc_dict
-
-
 
     # def extract_term_counts_with_generator(self):
     #     for doc in self._generator:
