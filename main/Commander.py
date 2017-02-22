@@ -27,7 +27,7 @@ class Commander():
             frequencyCount, word = line.decode('utf-8').split()
             freqSet.add(frequencyCount)
             vocabSet.add(word)
-            dictVocabFreq[word] = frequencyCount
+            dictVocabFreq[word] = int(frequencyCount)
         proc.stdout.close()
         proc.stdin.close()
         self.vocabSize = len(vocabSet)
@@ -41,7 +41,16 @@ class Commander():
         with open(pathDirectory + filename, 'rb') as csvfile:
             moviereader = csv.reader(csvfile, delimiter='\t')
             for row in moviereader:
-                yield (row[0], row[1])
+                yield (row[0], row[-1])
+
+    def get_corpus_as_lists(self, filename, path_directory='../resources/'):
+        docs = []
+        labels = []
+        for doc, label in self.getDocumentsYield(filename, path_directory):
+            docs.append(doc)
+            labels.append(int(label))
+
+        return docs, labels
 
     def get_corpus_as_numpy(self, filename, path_directory='../resources/'):
         docs = []

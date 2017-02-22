@@ -12,11 +12,17 @@ class IntegrationTest(unittest.TestCase):
     def tearDown(self):
         self
 
-    def test_read_vocab_freq_mat(self):
-        vocab_freq_mat = self.commander.readVocabulary('training.txt')
-        print vocab_freq_mat
-        # print vocab_freq_mat.shape
-        # trainMat =
+    def test_read_vocab_freq_dict(self):
+        vocab_freq_dict = self.commander.readVocabulary('training.txt')
+        print vocab_freq_dict
+
+
+
+    # def test_read_vocab_freq_mat(self):
+    #     vocab_freq_mat = self.commander.readVocabulary('training.txt')
+    #     print vocab_freq_mat
+    #     # print vocab_freq_mat.shape
+    #     # trainMat =
 
     def test_read_corpus(self):
         corpus = self.commander.get_corpus_as_numpy('training.txt')
