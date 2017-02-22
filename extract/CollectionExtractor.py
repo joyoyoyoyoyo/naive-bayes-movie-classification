@@ -37,6 +37,6 @@ def count_neg_reviews(training_mat=np.random.choice([0,1], size=(3,5), p=[.9,.1]
     print num_neg_reviews
     print labels_vector
 
-
-count_pos_reviews()
-count_neg_reviews()
+if __name__ == "__main__":
+    count_pos_reviews()
+    count_neg_reviews()
