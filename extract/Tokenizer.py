@@ -1,6 +1,6 @@
 import re
 
-from Commander import Commander
+from main.Commander import Commander
 
 
 class Tokenizer():
