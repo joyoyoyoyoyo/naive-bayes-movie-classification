@@ -6,5 +6,8 @@ class IntegrationTest(unittest.TestCase):
         self
     def tearDown(self):
         self
-    def testClassify(self):
-        self
+    def testTrain(self):
+
+        trainMat =
+
+    def testClassif(self):
