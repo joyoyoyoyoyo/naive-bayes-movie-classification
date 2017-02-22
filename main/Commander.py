@@ -28,8 +28,8 @@ class Commander():
         proc.stdin.close()
         self.vocabSize = len(vocabMat)
         # return np.array(freqMat), np.array(vocabMat)
-        trainingMat = np.column_stack((vocabMat, freqMat))
-        return trainingMat
+        vocabFreqMat = np.column_stack((vocabMat, freqMat))
+        return vocabFreqMat
 
     def getDocuments(self, filename, pathDirectory='./resources/'):
         with open(pathDirectory + filename, 'rb') as csvfile:

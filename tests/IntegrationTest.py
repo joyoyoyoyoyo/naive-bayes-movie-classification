@@ -10,10 +10,10 @@ class IntegrationTest(unittest.TestCase):
 
     def tearDown(self):
         self
-    def testTrain(self):
-        trainingMat = self.commander.readVocabulary('training.txt')
-        print trainingMat
-        print trainingMat.shape
+    def test_read_vocab_freq_mat(self):
+        vocab_freq_mat = self.commander.readVocabulary('training.txt')
+        print vocab_freq_mat
+        print vocab_freq_mat.shape
         # trainMat =
     def testClassify(self):
         self
