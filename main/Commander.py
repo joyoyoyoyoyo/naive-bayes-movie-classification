@@ -1,6 +1,7 @@
 import subprocess
 import csv
 import numpy as np
+from functools import reduce
 
 # import shlex # args = shlex.split(command)
 # https://docs.python.org/2/tutorial/datastructures.html
@@ -19,18 +20,22 @@ class Commander():
         command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
         retcode = proc.poll()
-        freqMat = []
-        vocabMat = []
+        freqSet = set([])
+        vocabSet = set([])
+        dictVocabFreq = {}
         for line in iter(proc.stdout.readline, b''):
             frequencyCount, word = line.decode('utf-8').split()
-            freqMat.append(frequencyCount)
-            vocabMat.append(word)
+            freqSet.add(frequencyCount)
+            vocabSet.add(word)
+            dictVocabFreq[word] = frequencyCount
         proc.stdout.close()
         proc.stdin.close()
-        self.vocabSize = len(vocabMat)
+        self.vocabSize = len(vocabSet)
+        return dictVocabFreq
+        # return freqSet, vocabSet, dictVocabFreq
         # return np.array(freqMat), np.array(vocabMat)
-        vocabFreqMat = np.column_stack((vocabMat, freqMat))
-        return vocabFreqMat
+        # vocabFreqMat = np.column_stack((vocabMat, freqMat))
+        # return vocabFreqMat
 
     def getDocumentsYield(self, filename, pathDirectory='../resources/'):
         with open(pathDirectory + filename, 'rb') as csvfile:
@@ -48,6 +53,20 @@ class Commander():
         # return (docs, labels)
         corpus = np.column_stack((docs, labels))
         return corpus
+
+    # def init_vocabulary_from_corpus(self, filename, path_directory='../resources/'):
+    #     vocab_freq_mat = self.readVocabulary(filename, path_directory)
+    #     print len(vocab_freq_mat)
+    #     print len(vocab_freq_mat[:,0])
+    #
+    #     # >> np.union1d([-1, 0, 1], [-2, 0, 2])
+    #     union = reduce(np.union1d, (vocab_freq_mat[:,0], ['zzzzzzzzzzzzzz']))
+    #     print len(union)
+    #     # print len(union[:,0]) # potential bug
+    #     print union.size
+    #     print union[union.size-1][0]
+    #     # print len(union[:,0])
+    #     return union
 
             # did not work
     #   try this
