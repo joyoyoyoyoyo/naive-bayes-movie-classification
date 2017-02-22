@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 # Steps for Tokenization
 
 # Matrix representation
@@ -16,8 +16,9 @@ from extract.DocumentExtractor import DocumentExtractor
 from extract.Tokenizer import Tokenizer
 from main.Commander import Commander
 
-# def train(doc, label, num_docs, num_unique_terms):
-
+def train(pos_reviews, doc, label, num_docs, num_unique_terms):
+    prob_positive_review = pos_reviews/float(num_docs)
+    print prob_positive_review
 
 
 if __name__ == "__main__":
@@ -29,13 +30,15 @@ if __name__ == "__main__":
     vocab_size = len(vocabDict)
     count = 0
     trainMat = []
-    corpus = commander.get_corpus_as_numpy('training.txt')
-    num_docs = corpus.shape[0]
+    docs, labels = commander.get_corpus_as_numpy('training.txt')
+    # num_docs = corpus.shape[0]
+    num_docs = len(docs)
     print num_docs
-    for row in corpus:
-        terms = tokenizer.tokenize_sentence(row[0])
+    positive_reviews = sum(labels)
+    for doc, label in zip(docs,labels):
+        terms = tokenizer.tokenize_sentence(doc)
         term_freq_in_doc_vector = document_extractor.bag_of_words_term_freq_dict(vocabDict,terms)
-        # prob = train(doc=row[0], label=row[1], num_docs=num_docs, num_unique_terms=vocab_size)
+        prob = train(positive_reviews, doc=doc, label=label, num_docs=num_docs, num_unique_terms=vocab_size)
         # if count % 100 == 0:
         #     print term_freq_in_doc_vector
         # count += 1

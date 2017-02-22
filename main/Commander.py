@@ -63,9 +63,13 @@ class Commander():
             docs.append(doc)
             labels.append(int(label))
 
-        # return (docs, labels)
-        corpus = np.column_stack((docs, labels))
-        return corpus
+        # docs = np.array(docs)
+        # labels = np.array(labels)
+        # corpus = np.empty(shape=(docs.))
+        # docs, labels = np.array(docs), np.array(labels)
+        return docs, labels
+        # corpus = np.column_stack((docs, labels))
+        # return corpus
 
     # def init_vocabulary_from_corpus(self, filename, path_directory='../resources/'):
     #     vocab_freq_mat = self.readVocabulary(filename, path_directory)
