@@ -42,7 +42,8 @@ if __name__ == "__main__":
 
     # Train
     startTraining = timeit.default_timer()
-    for label, doc_vector in zip(labels, doc_vectors):
+    zippedDocs = zip(labels, doc_vectors)
+    for label, doc_vector in zippedDocs:
         doc_vec_as_array = np.array(doc_vector)
         doc_word_count = sum(doc_vec_as_array)
         if label is 1:
@@ -57,15 +58,15 @@ if __name__ == "__main__":
     stopTraining = timeit.default_timer()
 
 
-    training_labels, training_doc_vectors = commander.get_test_corpus_as_numpy(vocab, trainingFileName)
+    # training_labels, training_doc_vectors = commander.get_test_corpus_as_numpy(vocab, trainingFileName)
 
     # Classify training set
     correctTraining = 0
     total_train_docs = 0
     startLabeling = timeit.default_timer()
-    for training_label, training_doc_vec in zip(training_labels, training_doc_vectors):
-        classified = commander.classify(training_doc_vec, prob_pos_vector, prob_neg_vector,prob_positive_review)
-        if training_label is classified:
+    for label, doc_vector in zippedDocs:
+        classified = commander.classify(doc_vector, prob_pos_vector, prob_neg_vector,prob_positive_review)
+        if label is classified:
             correctTraining += 1
         total_train_docs += 1
         # print classified
@@ -86,7 +87,7 @@ if __name__ == "__main__":
         print classified
 
     stopTesting = timeit.default_timer()
-    print str(stopTraining - startTraining) + " seconds (training)"
-    print str(stopTesting - startLabeling) + " seconds (labeling)"
-    print str(correctTraining/float(total_train_docs)) + " (training)"
-    print str(correctTesting/float(total_testing_docs)) + " (testing)"
+    print str(int(stopTraining - startTraining)) + " seconds (training)"
+    print str(int(stopTesting - startLabeling)) + " seconds (labeling)"
+    print str("{0:.3f}".format(correctTraining/float(total_train_docs))) + " (training)"
+    print str("{0:.3f}".format(correctTesting/float(total_testing_docs))) + " (testing)"
