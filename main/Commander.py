@@ -18,12 +18,15 @@ class Commander():
         self.doc_count = 0
         self.pos_review_count = 0
         self.neg_review_count = 0
+        self.test_doc_count = 0
+        self.test_neg_review_count = 0
+        self.test_neg_review_count = 0
         self._tokenizer = Tokenizer()
 
     # Training data vocabulary size: 35918
     # Testing  data vocabulary size: 11123
     def readVocabulary(self, filename, pathDirectory='../resources/'):
-        command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
+        command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + ' < ../resources/testing.txt' + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
         retcode = proc.poll()
         freq_list = []
@@ -59,29 +62,62 @@ class Commander():
                     if term in vocab:
                         index = vocab.index(term)
                         doc_vector[index] += 1
+                    # TODO: DELETE
+                    # else:
+                    #     vocab.append(term)
+                    #     doc_vector.append(0)
+                    #     index = vocab.index(term)
+                    #     doc_vector[index] += 1
+                    #     self.vocab_size += 1
                         # term_frequency = freq[index]
                         # doc_vector[vocab.index(term)] = term_frequency
                 # if word in vocabList:
                 #     returnVec[vocabList.index(word)] = 1
-                yield (row[0], int(row[-1]), doc_vector)
+                yield (int(row[-1]), doc_vector)
         csvfile.close()
+
+    def getTestDocumentsYield(self, vocab, filename, pathDirectory='../resources/'):
+        self.test_doc_count = 0
+
+        with open(pathDirectory + filename, 'rb') as csvfile:
+            moviereader = csv.reader(csvfile, delimiter='\t')
+            for row in moviereader:
+                self.test_doc_count += 1
+                tokens = self._tokenizer.tokenize_sentence(row[0])
+                doc_vector = [0] * self.vocab_size
+                for term in tokens:
+                    if term in vocab:
+                        index = vocab.index(term)
+                        doc_vector[index] += 1
+                    # else:
+                        # vocab.append(term)
+                        # doc_vector.append(1)
+                        # index = vocab.index(term)
+                        # doc_vector[index] += 1
+                        # term_frequency = freq[index]
+                        # doc_vector[vocab.index(term)] = term_frequency
+                # if word in vocabList:
+                #     returnVec[vocabList.index(word)] = 1
+                yield (int(row[-1]), doc_vector)
+        csvfile.close()
+
 
     def get_corpus_as_lists(self, vocab, freq, filename, path_directory='../resources/'):
         labels = []
-        docs = []
+        # docs = []
         doc_vectors = []
-        for doc, label, doc_vector in self.getDocumentsYield(vocab, freq, filename, path_directory):
-            docs.append(doc)
+        for  label, doc_vector in self.getDocumentsYield(vocab, freq, filename, path_directory):
+            # docs.append(doc)
             labels.append(label)
             doc_vectors.append(doc_vector)
-        return docs, labels, doc_vectors
+        return labels, doc_vectors
 
     def get_corpus_as_numpy(self, vocab, freq, filename, path_directory='../resources/'):
-        docs = []
+        # docs = []
         labels = []
         doc_vectors = []
-        for doc, label, doc_vector in self.getDocumentsYield(vocab, freq, filename,path_directory):
-            docs.append(doc)  # doc is a string doc
+        for label, doc_vector in self.getDocumentsYield(vocab, freq, filename,path_directory):
+            # docs.append(doc)  # doc is a string doc
             labels.append(label)  # label is an int (1 or 0)
             doc_vectors.append(doc_vector)
 
@@ -89,11 +125,36 @@ class Commander():
         # labels = np.array(labels)
         # corpus = np.empty(shape=(docs.))
         # docs, labels = np.array(docs), np.array(labels)
-        return docs, labels, doc_vectors
+        return labels, doc_vectors
         # corpus = np.column_stack((docs, labels))
         # return corpus
 
-    # def init_vocabulary_from_corpus(self, filename, path_directory='../resources/'):
+    def get_test_corpus_as_numpy(self, vocab, filename, path_directory='../resources/'):
+        # docs = []
+        doc_vectors = []
+        labels = []
+        for label, doc_vector in self.getTestDocumentsYield(vocab, filename, path_directory):
+            # docs.append(doc)  # doc is a string doc
+            labels.append(label)  # label is an int (1 or 0)
+            doc_vectors.append(doc_vector)
+
+        # docs = np.array(docs)
+        # labels = np.array(labels)
+        # corpus = np.empty(shape=(docs.))
+        # docs, labels = np.array(docs), np.array(labels)
+        return labels, doc_vectors
+        # corpus = np.column_stack((docs, labels))
+        # return corpus
+
+    def classify(self, test_doc_vec, prob_pos_vector, prob_neg_vector, prob_pos_review_overall):
+        predicted_pos = sum(np.array(test_doc_vec) * np.array(prob_pos_vector)) + np.log(prob_pos_review_overall)
+        predicted_neg = sum(np.array(test_doc_vec) * np.array(prob_neg_vector)) + np.log(1.0 - prob_pos_review_overall)
+        if predicted_pos > predicted_neg:
+            return 1
+        else:
+            return 0
+
+            # def init_vocabulary_from_corpus(self, filename, path_directory='../resources/'):
     #     vocab_freq_mat = self.readVocabulary(filename, path_directory)
     #     print len(vocab_freq_mat)
     #     print len(vocab_freq_mat[:,0])

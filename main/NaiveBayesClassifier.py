@@ -31,29 +31,44 @@ if __name__ == "__main__":
     # docs, labels = commander.get_corpus_as_lists('training.txt')
     vocab, freq = commander.readVocabulary('training.txt')
     trainMat = []
-    docs, labels, doc_vectors = commander.get_corpus_as_numpy(vocab, freq, 'training.txt')
-    # prob_positive_review = positive_reviews / float(num_docs)
-    # freq_positive = np.zeros(vocab_size)
-    # freq_negative = np.zeros(vocab_size)  # numerators
-    prob_positive_given_collection =  2.0
-    prob_negative_given_collection =  2.0  # denominators
+    labels, doc_vectors = commander.get_corpus_as_numpy(vocab, freq, 'training.txt')
+    prob_positive_review = commander.pos_review_count / float(commander.doc_count)
+    term_freq_in_positive_reviews = np.ones(commander.vocab_size)
+    term_freq_in_negative_reviews = np.ones(commander.vocab_size)  # numerators
+    total_word_count_in_negative_reviews = 2.0  # avoid divide by 0 & 1
+    total_word_count_in_positive_reviews = 2.0  # denominators
     count = 0
-    for doc, label, doc_vectors in zip(docs, labels, doc_vectors):
-        terms = tokenizer.tokenize_sentence(doc)
-        num_terms_in_doc = len(terms)
-        # term_freq_in_doc_vector = document_extractor.bag_of_words_term_freq_dict(vocabDict, terms)
-        # prob = train(positive_reviews, term_freq_in_doc_vector, doc=doc, label=label, num_docs=num_docs, num_unique_terms=vocab_size, num_terms_in_doc=num_terms_in_doc)
-
-        if label == 1:
-            # freq_positive += term_freq_in_doc_vector
-            prob_positive_given_collection += num_terms_in_doc
+    for label, doc_vector in zip(labels, doc_vectors):
+        doc_vec_as_array = np.array(doc_vector)
+        doc_word_count = sum(doc_vec_as_array)
+        if label is 1:
+            term_freq_in_positive_reviews += doc_vec_as_array
+            total_word_count_in_positive_reviews += doc_word_count
         else:
-            # freq_negative += term_freq_in_doc_vector
-            prob_negative_given_collection += num_terms_in_doc
-    print prob_positive_given_collection
-    print prob_positive_given_collection
-    # prob_pos_vector = np.log((freq_positive + 1) / prob_positive_given_collection)
-    # prob_neg_vector = np.log((freq_negative + 1)/ prob_negative_given_collection)
+            term_freq_in_negative_reviews += doc_vec_as_array
+            total_word_count_in_negative_reviews += doc_word_count
+        count += 1
+        print count
+    prob_pos_vector = np.log(term_freq_in_positive_reviews / total_word_count_in_positive_reviews)
+    prob_neg_vector = np.log(term_freq_in_negative_reviews / total_word_count_in_negative_reviews)
+
+    testing_labels, testing_doc_vectors = commander.get_test_corpus_as_numpy(vocab, 'testing.txt')
+    correct = 0
+    wrong = 0
+    total_test_docs = 0
+    for testing_label, test_doc_vec in zip(testing_labels, testing_doc_vectors):
+        classified = commander.classify(test_doc_vec, prob_pos_vector, prob_neg_vector,prob_positive_review)
+        if testing_label is classified:
+            correct += 1
+        else:
+            wrong += 1
+        total_test_docs += 1
+
+        if total_test_docs % 100 == 0:
+            print correct/float(total_test_docs)
+    print correct/float(total_test_docs)
+
+    # prob_neg_vector = np.log((freq_negative + 1)print/ prob_negative_given_collection)
     # print prob_positive_review, prob_pos_vector, prob_neg_vector
         # return prob_positive_review, prob_pos_vector, prob_neg_vector
 
