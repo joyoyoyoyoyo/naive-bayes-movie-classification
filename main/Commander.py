@@ -20,19 +20,17 @@ class Commander():
         command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
         retcode = proc.poll()
-        freqSet = set([])
-        vocabSet = set([])
-        dictVocabFreq = {}
+        freq_list = []
+        vocab_list = []
+        # dictVocabFreq = {}
         for line in iter(proc.stdout.readline, b''):
             frequencyCount, word = line.decode('utf-8').split()
-            freqSet.add(str(frequencyCount))
-            vocabSet.add(str(word))
-            dictVocabFreq[word] = int(str(frequencyCount))
+            freq_list.append(int(str(frequencyCount)))
+            vocab_list.append(str(word))
         proc.stdout.close()
         proc.stdin.close()
-        self.vocab_size = len(vocabSet)
-        return dictVocabFreq, vocabSet, freqSet
-        # return freqSet, vocabSet, dictVocabFreq
+        self.vocab_size = len(vocab_list)
+        return vocab_list, freq_list
         # return np.array(freqMat), np.array(vocabMat)
         # vocabFreqMat = np.column_stack((vocabMat, freqMat))
         # return vocabFreqMat
