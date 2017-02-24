@@ -1,6 +1,9 @@
 import numpy as np
 import math
 import sys
+import timeit
+
+startTesting = timeit.default_timer()
 # Steps for Tokenization
 
 # Matrix representation
@@ -36,6 +39,7 @@ if __name__ == "__main__":
     total_word_count_in_negative_reviews = 2.0  # avoid divide by 0 & 1
     total_word_count_in_positive_reviews = 2.0  # denominators
     count = 0
+    startTraining = timeit.default_timer()
     for label, doc_vector in zip(labels, doc_vectors):
         doc_vec_as_array = np.array(doc_vector)
         doc_word_count = sum(doc_vec_as_array)
@@ -46,25 +50,48 @@ if __name__ == "__main__":
             term_freq_in_negative_reviews += doc_vec_as_array
             total_word_count_in_negative_reviews += doc_word_count
         count += 1
-        print count
     prob_pos_vector = np.log(term_freq_in_positive_reviews / total_word_count_in_positive_reviews)
     prob_neg_vector = np.log(term_freq_in_negative_reviews / total_word_count_in_negative_reviews)
+    stopTraining = timeit.default_timer()
+
+
+    training_labels, training_doc_vectors = commander.get_test_corpus_as_numpy(vocab, trainingFileName)
+
+    # Classify training set
+    correctTraining = 0
+    total_train_docs = 0
+    startLabeling = timeit.default_timer()
+    for training_label, training_doc_vec in zip(training_labels, training_doc_vectors):
+        classified = commander.classify(training_doc_vec, prob_pos_vector, prob_neg_vector,prob_positive_review)
+        if training_label is classified:
+            correctTraining += 1
+        total_train_docs += 1
+        if total_train_docs % 100 == 0:
+            print correctTraining / float(total_train_docs)
+            # print classified
+    stopLabeling = timeit.default_timer()
+
 
     testing_labels, testing_doc_vectors = commander.get_test_corpus_as_numpy(vocab, testingFileName)
-    correct = 0
-    wrong = 0
-    total_test_docs = 0
+
+    correctTesting = 0
+    total_testing_docs = 0
+    startTesting = timeit.default_timer()
     for testing_label, test_doc_vec in zip(testing_labels, testing_doc_vectors):
         classified = commander.classify(test_doc_vec, prob_pos_vector, prob_neg_vector,prob_positive_review)
         if testing_label is classified:
-            correct += 1
-        else:
-            wrong += 1
-        total_test_docs += 1
+            correctTesting += 1
+        total_testing_docs += 1
+        # print classified
+        if total_testing_docs % 100 == 0:
+            print correctTesting/float(total_testing_docs)
+    # startTesting
+    stopTesting = timeit.default_timer()
+    print str(stopTraining - startTraining) + " seconds (training)"
+    print str(stopTesting - startTesting) + " seconds (labeling)"
+    print str(correctTraining/float(total_train_docs)) + " (training)"
+    print str(correctTesting/float(total_testing_docs)) + " (testing)"
 
-        if total_test_docs % 100 == 0:
-            print correct/float(total_test_docs)
-    print correct/float(total_test_docs)
 
     # prob_neg_vector = np.log((freq_negative + 1)print/ prob_negative_given_collection)
     # print prob_positive_review, prob_pos_vector, prob_neg_vector

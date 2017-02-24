@@ -26,7 +26,7 @@ class Commander():
     # Training data vocabulary size: 35918
     # Testing  data vocabulary size: 11123
     def readVocabulary(self, filename, testingFileName, pathDirectory='../'):
-        command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + ' < ' + pathDirectory + testingFileName + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
+        command = "tr 'A-Z' 'a-z' < " + filename + ' < ' + testingFileName + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
         retcode = proc.poll()
         freq_list = []
@@ -48,7 +48,7 @@ class Commander():
     def getDocumentsYield(self, vocab, freq, filename, pathDirectory='../'):
         self.doc_count = 0
 
-        with open(pathDirectory + filename, 'rb') as csvfile:
+        with open(filename, 'rb') as csvfile:
             moviereader = csv.reader(csvfile, delimiter='\t')
             for row in moviereader:
                 self.doc_count += 1
@@ -79,7 +79,7 @@ class Commander():
     def getTestDocumentsYield(self, vocab, filename, pathDirectory='../'):
         self.test_doc_count = 0
 
-        with open(pathDirectory + filename, 'rb') as csvfile:
+        with open(filename, 'rb') as csvfile:
             moviereader = csv.reader(csvfile, delimiter='\t')
             for row in moviereader:
                 self.test_doc_count += 1
