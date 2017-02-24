@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import sys
 # Steps for Tokenization
 
 # Matrix representation
@@ -17,21 +18,18 @@ from extract.DocumentExtractor import DocumentExtractor
 from extract.Tokenizer import Tokenizer
 from main.Commander import Commander
 
-# def train(pos_reviews, term_freq_in_doc_vector, doc, label, num_docs, num_unique_terms, num_terms_in_doc):
-
-
-
-    # print prob_positive_review
-
-
 if __name__ == "__main__":
     commander = Commander()
     document_extractor = DocumentExtractor()
     tokenizer = Tokenizer()
+    files = sys.argv[1:]
+    trainingFileName = sys.argv[1]
+    testingFileName = sys.argv[2]
+
     # docs, labels = commander.get_corpus_as_lists('training.txt')
-    vocab, freq = commander.readVocabulary('training.txt')
+    vocab, freq = commander.readVocabulary(trainingFileName, testingFileName)
     trainMat = []
-    labels, doc_vectors = commander.get_corpus_as_numpy(vocab, freq, 'training.txt')
+    labels, doc_vectors = commander.get_corpus_as_numpy(vocab, freq, trainingFileName)
     prob_positive_review = commander.pos_review_count / float(commander.doc_count)
     term_freq_in_positive_reviews = np.ones(commander.vocab_size)
     term_freq_in_negative_reviews = np.ones(commander.vocab_size)  # numerators
@@ -52,7 +50,7 @@ if __name__ == "__main__":
     prob_pos_vector = np.log(term_freq_in_positive_reviews / total_word_count_in_positive_reviews)
     prob_neg_vector = np.log(term_freq_in_negative_reviews / total_word_count_in_negative_reviews)
 
-    testing_labels, testing_doc_vectors = commander.get_test_corpus_as_numpy(vocab, 'testing.txt')
+    testing_labels, testing_doc_vectors = commander.get_test_corpus_as_numpy(vocab, testingFileName)
     correct = 0
     wrong = 0
     total_test_docs = 0

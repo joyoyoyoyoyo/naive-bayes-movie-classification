@@ -25,8 +25,8 @@ class Commander():
 
     # Training data vocabulary size: 35918
     # Testing  data vocabulary size: 11123
-    def readVocabulary(self, filename, pathDirectory='../resources/'):
-        command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + ' < ../resources/testing.txt' + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
+    def readVocabulary(self, filename, testingFileName, pathDirectory='../'):
+        command = "tr 'A-Z' 'a-z' < " + pathDirectory + filename + ' < ' + pathDirectory + testingFileName + " | " + "tr -sc 'A-Za-z' '\\n' | sort | uniq -c | sort -n -r"
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
         retcode = proc.poll()
         freq_list = []
@@ -45,7 +45,7 @@ class Commander():
         # num_docs = corpus.shape[0]
         # return vocabFreqMat
 
-    def getDocumentsYield(self, vocab, freq, filename, pathDirectory='../resources/'):
+    def getDocumentsYield(self, vocab, freq, filename, pathDirectory='../'):
         self.doc_count = 0
 
         with open(pathDirectory + filename, 'rb') as csvfile:
@@ -76,7 +76,7 @@ class Commander():
                 yield (int(row[-1]), doc_vector)
         csvfile.close()
 
-    def getTestDocumentsYield(self, vocab, filename, pathDirectory='../resources/'):
+    def getTestDocumentsYield(self, vocab, filename, pathDirectory='../'):
         self.test_doc_count = 0
 
         with open(pathDirectory + filename, 'rb') as csvfile:
@@ -102,7 +102,7 @@ class Commander():
         csvfile.close()
 
 
-    def get_corpus_as_lists(self, vocab, freq, filename, path_directory='../resources/'):
+    def get_corpus_as_lists(self, vocab, freq, filename, path_directory='../'):
         labels = []
         # docs = []
         doc_vectors = []
@@ -112,7 +112,7 @@ class Commander():
             doc_vectors.append(doc_vector)
         return labels, doc_vectors
 
-    def get_corpus_as_numpy(self, vocab, freq, filename, path_directory='../resources/'):
+    def get_corpus_as_numpy(self, vocab, freq, filename, path_directory='../'):
         # docs = []
         labels = []
         doc_vectors = []
@@ -129,7 +129,7 @@ class Commander():
         # corpus = np.column_stack((docs, labels))
         # return corpus
 
-    def get_test_corpus_as_numpy(self, vocab, filename, path_directory='../resources/'):
+    def get_test_corpus_as_numpy(self, vocab, filename, path_directory='../'):
         # docs = []
         doc_vectors = []
         labels = []
