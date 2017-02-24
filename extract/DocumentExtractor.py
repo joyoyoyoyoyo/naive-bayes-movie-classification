@@ -60,8 +60,8 @@ class DocumentExtractor():
     def extract_term_counts(term, doc):
         tokens = Tokenizer().tokenize_sentence(doc)
         normalizedTerm = term
-        termFrequency = tokens.count(normalizedTerm)
-        return term, termFrequency
+        tf_in_doc = tokens.count(normalizedTerm)
+        return term, tf_in_doc, len(tokens)
 
     @staticmethod
     def count_terms(doc):

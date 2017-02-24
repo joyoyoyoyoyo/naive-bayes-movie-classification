@@ -8,11 +8,17 @@ from functools import reduce
 # https://docs.python.org/2/library/subprocess.html
 # https://docs.scipy.org/doc/numpy/reference/generated/numpy.genfromtxt.html
 # https://docs.scipy.org/doc/numpy/reference/generated/numpy.loadtxt.html
+from extract.Tokenizer import Tokenizer
+
 
 class Commander():
 
     def __init__(self):
         self.vocab_size = 0
+        self.doc_count = 0
+        self.pos_review_count = 0
+        self.neg_review_count = 0
+        self._tokenizer = Tokenizer()
 
     # Training data vocabulary size: 35918
     # Testing  data vocabulary size: 11123
@@ -33,39 +39,57 @@ class Commander():
         return vocab_list, freq_list
         # return np.array(freqMat), np.array(vocabMat)
         # vocabFreqMat = np.column_stack((vocabMat, freqMat))
+        # num_docs = corpus.shape[0]
         # return vocabFreqMat
 
-    def getDocumentsYield(self, filename, pathDirectory='../resources/'):
-        # count = 0
+    def getDocumentsYield(self, vocab, freq, filename, pathDirectory='../resources/'):
+        self.doc_count = 0
+
         with open(pathDirectory + filename, 'rb') as csvfile:
             moviereader = csv.reader(csvfile, delimiter='\t')
             for row in moviereader:
-                yield (row[0], int(row[-1]))
-                # count += 1
-        # print count
+                self.doc_count += 1
+                if int(row[-1]) is 1:
+                    self.pos_review_count += 1
+                else:
+                    self.neg_review_count += 1
+                tokens = self._tokenizer.tokenize_sentence(row[0])
+                doc_vector = [0] * self.vocab_size
+                for term in tokens:
+                    if term in vocab:
+                        index = vocab.index(term)
+                        doc_vector[index] += 1
+                        # term_frequency = freq[index]
+                        # doc_vector[vocab.index(term)] = term_frequency
+                # if word in vocabList:
+                #     returnVec[vocabList.index(word)] = 1
+                yield (row[0], int(row[-1]), doc_vector)
         csvfile.close()
 
-    def get_corpus_as_lists(self, filename, path_directory='../resources/'):
+    def get_corpus_as_lists(self, vocab, freq, filename, path_directory='../resources/'):
+        labels = []
+        docs = []
+        doc_vectors = []
+        for doc, label, doc_vector in self.getDocumentsYield(vocab, freq, filename, path_directory):
+            docs.append(doc)
+            labels.append(label)
+            doc_vectors.append(doc_vector)
+        return docs, labels, doc_vectors
+
+    def get_corpus_as_numpy(self, vocab, freq, filename, path_directory='../resources/'):
         docs = []
         labels = []
-        for doc, label in self.getDocumentsYield(filename, path_directory):
-            docs.append(doc)
-            labels.append(int(label))
-
-        return docs, labels
-
-    def get_corpus_as_numpy(self, filename, path_directory='../resources/'):
-        docs = []
-        labels = []
-        for doc, label in self.getDocumentsYield(filename,path_directory):
-            docs.append(doc)
-            labels.append(int(label))
+        doc_vectors = []
+        for doc, label, doc_vector in self.getDocumentsYield(vocab, freq, filename,path_directory):
+            docs.append(doc)  # doc is a string doc
+            labels.append(label)  # label is an int (1 or 0)
+            doc_vectors.append(doc_vector)
 
         # docs = np.array(docs)
         # labels = np.array(labels)
         # corpus = np.empty(shape=(docs.))
         # docs, labels = np.array(docs), np.array(labels)
-        return docs, labels
+        return docs, labels, doc_vectors
         # corpus = np.column_stack((docs, labels))
         # return corpus
 
