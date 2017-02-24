@@ -12,7 +12,7 @@ from functools import reduce
 class Commander():
 
     def __init__(self):
-        vocabSize = 0
+        self.vocab_size = 0
 
     # Training data vocabulary size: 35918
     # Testing  data vocabulary size: 11123
@@ -25,12 +25,12 @@ class Commander():
         dictVocabFreq = {}
         for line in iter(proc.stdout.readline, b''):
             frequencyCount, word = line.decode('utf-8').split()
-            freqSet.add(frequencyCount)
-            vocabSet.add(word)
-            dictVocabFreq[word] = int(frequencyCount)
+            freqSet.add(str(frequencyCount))
+            vocabSet.add(str(word))
+            dictVocabFreq[word] = int(str(frequencyCount))
         proc.stdout.close()
         proc.stdin.close()
-        self.vocabSize = len(vocabSet)
+        self.vocab_size = len(vocabSet)
         return dictVocabFreq, vocabSet, freqSet
         # return freqSet, vocabSet, dictVocabFreq
         # return np.array(freqMat), np.array(vocabMat)
