@@ -42,7 +42,7 @@ class Commander():
         with open(pathDirectory + filename, 'rb') as csvfile:
             moviereader = csv.reader(csvfile, delimiter='\t')
             for row in moviereader:
-                yield (row[0], row[-1])
+                yield (row[0], int(row[-1]))
                 # count += 1
         # print count
         csvfile.close()
@@ -101,13 +101,25 @@ class Commander():
 
 if __name__ == "__main__":
     commander = Commander()
-    freqVec, vocabVec = commander.readVocabulary('training.txt')
-    for doc, label in commander.getDocumentsYield('training.txt'):
-        print label + ":\t\t" + doc
-        # print label
-    # print(freqVec)
-    # print(vocabVec)
+    # freqVec, vocabVec = commander.readVocabulary('training.txt')
+    posReview = 0
+    negReview = 0
+    reviewCount = 0
 
+    # or use unix
+    # 'wc -l resources/training.txt'                # of each doc
+    # 'grep -i word resources/training.txt | wc -l' # term freq count in each doc
+    for doc, label in commander.getDocumentsYield('training.txt'):
+        reviewCount += 1
+        if label is 1:
+            posReview += 1
+        else:
+            negReview += 1
+        # print label + ":\t\t" + doc
+        # print label
+    print("Positive Reviews\t" + str(posReview))
+    print("Negative Reviews\t" + str(negReview))
+    print("TotalNum Reviews\t" + str(reviewCount))
     # def tokenizeSentence(self, sentence):
 
 
