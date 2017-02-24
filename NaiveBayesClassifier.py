@@ -39,6 +39,8 @@ if __name__ == "__main__":
     total_word_count_in_negative_reviews = 2.0  # avoid divide by 0 & 1
     total_word_count_in_positive_reviews = 2.0  # denominators
     count = 0
+
+    # Train
     startTraining = timeit.default_timer()
     for label, doc_vector in zip(labels, doc_vectors):
         doc_vec_as_array = np.array(doc_vector)
@@ -66,14 +68,13 @@ if __name__ == "__main__":
         if training_label is classified:
             correctTraining += 1
         total_train_docs += 1
-        if total_train_docs % 100 == 0:
-            print correctTraining / float(total_train_docs)
-            # print classified
+        # print classified
     stopLabeling = timeit.default_timer()
 
 
     testing_labels, testing_doc_vectors = commander.get_test_corpus_as_numpy(vocab, testingFileName)
 
+    # classify the testing docs
     correctTesting = 0
     total_testing_docs = 0
     startTesting = timeit.default_timer()
@@ -82,21 +83,10 @@ if __name__ == "__main__":
         if testing_label is classified:
             correctTesting += 1
         total_testing_docs += 1
-        # print classified
-        if total_testing_docs % 100 == 0:
-            print correctTesting/float(total_testing_docs)
-    # startTesting
+        print classified
+
     stopTesting = timeit.default_timer()
     print str(stopTraining - startTraining) + " seconds (training)"
-    print str(stopTesting - startTesting) + " seconds (labeling)"
+    print str(stopTesting - startLabeling) + " seconds (labeling)"
     print str(correctTraining/float(total_train_docs)) + " (training)"
     print str(correctTesting/float(total_testing_docs)) + " (testing)"
-
-
-    # prob_neg_vector = np.log((freq_negative + 1)print/ prob_negative_given_collection)
-    # print prob_positive_review, prob_pos_vector, prob_neg_vector
-        # return prob_positive_review, prob_pos_vector, prob_neg_vector
-
-        # if count % 100 == 0:
-        #     print term_freq_in_doc_vector
-        # count += 1
